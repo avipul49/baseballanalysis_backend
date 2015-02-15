@@ -1,0 +1,5 @@
+callback(
+  { "cols":[ {"type":"string","label":"year"}, {"type":"number","label":"win"},{"type":"number","label":"loss"}], "rows":[ {"c":[{"v":"20-01-13"}, {"v":22},{"v":10}]}, 
+  {"c":[{"v":"21-01-13"}, {"v":24},{"v":10}]}, {"c":[{"v":"22-01-13"}, {"v":27},{"v":100}]} ]}
+)
+
