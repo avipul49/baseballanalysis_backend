@@ -1,4 +1,4 @@
-package com.baseballanalysis;
+package com.baseballanalysis.controller;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ import com.baseballanalysis.utils.DatabaseConnection;
 import com.baseballanalysis.utils.Queries;
 
 @RestController
-public class SalaryController {
+public class SalaryController extends BaseballController{
 	@RequestMapping("/getPlayerSalaries")
 	public @ResponseBody ArrayList<PlayerSalary> getTeamPerformance(
 			@RequestParam String teams, @RequestParam int startYear,
@@ -27,6 +27,7 @@ public class SalaryController {
 				"GET, POST, DELETE, PUT");
 		response.setHeader("Access-Control-Allow-Headers",
 				"Content-Type, Accept");
+		setResposeObject(response);
 
 		String query = String.format(Queries.playerSalary, startYear, endYear,
 				teams);

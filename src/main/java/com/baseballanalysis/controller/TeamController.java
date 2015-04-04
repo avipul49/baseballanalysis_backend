@@ -1,4 +1,4 @@
-package com.baseballanalysis;
+package com.baseballanalysis.controller;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,18 +22,14 @@ import com.baseballanalysis.utils.Queries;
 
 @Controller
 @RestController
-public class TeamController {
+public class TeamController extends BaseballController{
 
 	@RequestMapping("/getTeamPerformance")
 	public @ResponseBody ArrayList<Team> getTeamPerformance(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Credentials", "true");
-		response.setHeader("Access-Control-Allow-Methods",
-				"GET, POST, DELETE, PUT");
-		response.setHeader("Access-Control-Allow-Headers",
-				"Content-Type, Accept");
+		
+		setResposeObject(response);
 
 		String query = String.format(Queries.teamPerformance, startYear,
 				endYear, teams);
@@ -81,13 +77,8 @@ public class TeamController {
 	public @ResponseBody ArrayList<TeamOrientationStates> getTeamOrientation(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Credentials", "true");
-		response.setHeader("Access-Control-Allow-Methods",
-				"GET, POST, DELETE, PUT");
-		response.setHeader("Access-Control-Allow-Headers",
-				"Content-Type, Accept");
-
+		
+		setResposeObject(response);
 		String query = String.format(Queries.teamOrientationBattingPitching,
 				startYear, endYear, teams, startYear, endYear, teams);
 		System.out.println(query);
@@ -116,12 +107,8 @@ public class TeamController {
 	public @ResponseBody String getPlayerOrigin(@RequestParam String teams,
 			@RequestParam int startYear, @RequestParam int endYear,
 			HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Credentials", "true");
-		response.setHeader("Access-Control-Allow-Methods",
-				"GET, POST, DELETE, PUT");
-		response.setHeader("Access-Control-Allow-Headers",
-				"Content-Type, Accept");
+	
+		setResposeObject(response);
 		return "{\"cols\":[{\"type\":\"string\",\"label\":\"State\"},{\"type\":\"number\",\"label\":\"Player Count\"}],"
 				+ "\"rows\":[{\"c\":[{\"v\":\"US-AK\"},{\"v\":7}]},{\"c\":[{\"v\":\"US-AL\"},{\"v\":220}]},"
 				+ "{\"c\":[{\"v\":\"US-AR\"},{\"v\":99}]},{\"c\":[{\"v\":\"US-AZ\"},{\"v\":71}]},{\"c\":[{\"v\":\"US-CA\"},{\"v\":1446}]},{\"c\":[{\"v\":\"US-CO\"},{\"v\":54}]},"
