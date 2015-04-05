@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baseballanalysis.model.Individual;
 import com.baseballanalysis.model.Team;
-import com.baseballanalysis.model.TeamOrientationStates;
+import com.baseballanalysis.model.TeamOrientationStats;
 import com.baseballanalysis.utils.DatabaseConnection;
 import com.baseballanalysis.utils.Queries;
 
 @Controller
 @RestController
-public class TeamController extends BaseballController{
+public class TeamController extends BaseballController {
 
 	@RequestMapping("/getTeamPerformance")
 	public @ResponseBody ArrayList<Team> getTeamPerformance(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
-		
+
 		setResposeObject(response);
 
 		String query = String.format(Queries.teamPerformance, startYear,
@@ -74,10 +75,10 @@ public class TeamController extends BaseballController{
 	}
 
 	@RequestMapping("/getTeamOrientation")
-	public @ResponseBody ArrayList<TeamOrientationStates> getTeamOrientation(
+	public @ResponseBody ArrayList<TeamOrientationStats> getTeamOrientation(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
-		
+
 		setResposeObject(response);
 		String query = String.format(Queries.teamOrientationBattingPitching,
 				startYear, endYear, teams, startYear, endYear, teams);
@@ -85,9 +86,9 @@ public class TeamController extends BaseballController{
 		try {
 			Connection connection = DatabaseConnection.getConnection();
 			ResultSet res = connection.prepareStatement(query).executeQuery();
-			ArrayList<TeamOrientationStates> fetchedTeams = new ArrayList<TeamOrientationStates>();
+			ArrayList<TeamOrientationStats> fetchedTeams = new ArrayList<TeamOrientationStats>();
 			while (res.next()) {
-				TeamOrientationStates team = new TeamOrientationStates();
+				TeamOrientationStats team = new TeamOrientationStats();
 				team.setTeamId(res.getString(1));
 				team.setBattingRank(res.getInt(2));
 				team.setPitchingRank(res.getInt(3));
@@ -103,11 +104,40 @@ public class TeamController extends BaseballController{
 		return null;
 	}
 
+	@RequestMapping("/getTeamPlayingStyle")
+	public @ResponseBody ArrayList<Individual> getTeamPlayingStyle(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		String query = String.format(Queries.teamTendency, startYear, endYear,
+				teams);
+		System.out.println(query);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(query).executeQuery();
+			ArrayList<Individual> individuals = new ArrayList<Individual>();
+			while (res.next()) {
+				Individual individual = new Individual();
+				individual.setPlayerId(res.getString(1));
+				individual.setName(res.getString(2));
+				individual.setBattingStyle(res.getString(3).charAt(0));
+				individual.setThrowingStyle(res.getString(3).charAt(0));
+				individuals.add(individual);
+			}
+			connection.close();
+			return individuals;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@RequestMapping("/getPlayerOrigin")
 	public @ResponseBody String getPlayerOrigin(@RequestParam String teams,
 			@RequestParam int startYear, @RequestParam int endYear,
 			HttpServletResponse response) {
-	
+
 		setResposeObject(response);
 		return "{\"cols\":[{\"type\":\"string\",\"label\":\"State\"},{\"type\":\"number\",\"label\":\"Player Count\"}],"
 				+ "\"rows\":[{\"c\":[{\"v\":\"US-AK\"},{\"v\":7}]},{\"c\":[{\"v\":\"US-AL\"},{\"v\":220}]},"

@@ -7,4 +7,7 @@ public class Queries {
 			+ "('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) batting,"
 			+ "(select outs,pitchingRank, teamid from (select outs,rownum as pitchingRank, teamid from (select sum(t.SOA) as outs, t.teamid from teams t where t.yearid>=%s and t.yearid<=%s group by t.teamid order by outs desc)) where"
 			+ "('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) pitching where batting.teamid = pitching.teamid";
+
+	public static String teamTendency = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)), bats, throws from master where playerid in"
+			+ "(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%')))";
 }

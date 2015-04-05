@@ -1,6 +1,6 @@
 package com.baseballanalysis.model;
 
-public class TeamOrientationStates {
+public class TeamOrientationStats {
 	private String teamId;
 	private int battingRank;
 	private int pitchingRank;
