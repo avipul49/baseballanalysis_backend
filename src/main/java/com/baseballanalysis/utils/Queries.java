@@ -16,5 +16,5 @@ public class Queries {
 	public static String playerBirthCity = "select birthcity, count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by birthcity";
 	public static String allManagers = "select distinct managers.playerid, CONCAT(namefirst,CONCAT(' ',namelast)) from managers ,master where managers.playerid = master.playerid;";
 	public static String searchPlayer = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)) as name from master where playerid in (select distinct playerid from appearances where yearid>=%s and yearid<=%s) and (LOWER(namefirst) like LOWER('%%%s%%') or LOWER(namelast) like LOWER('%%%s%%')) and ROWNUM < 100";
-
+	public static String playerSalariesOverTheYears = "select yearid,teamid, playerid, salary from \"Salaries\" where playerid = '%s' and yearid >= %s and yearid <=%s order by yearid";
 }
