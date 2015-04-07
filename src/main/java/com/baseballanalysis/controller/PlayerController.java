@@ -73,6 +73,24 @@ public class PlayerController extends BaseballController {
 		return null;
 	}
 
+	@RequestMapping("/getPlayerWeightGroup")
+	public @ResponseBody ArrayList<NameValue> getPlayerWeightGroup(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+		setResposeObject(response);
+		return getNameValuePair(Queries.playersWithWeightGroups, teams,
+				startYear, endYear);
+	}
+
+	@RequestMapping("/getPlayerHeightGroup")
+	public @ResponseBody ArrayList<NameValue> getPlayerHeightGroup(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+		setResposeObject(response);
+		return getNameValuePair(Queries.playersWithHeightGroups, teams,
+				startYear, endYear);
+	}
+
 	private ArrayList<NameValue> getNameValuePair(String query, String teams,
 			int startYear, int endYear) {
 		String finalQuery = String.format(query, startYear, endYear, teams);

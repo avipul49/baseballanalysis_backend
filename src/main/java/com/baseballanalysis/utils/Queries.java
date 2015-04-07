@@ -17,4 +17,7 @@ public class Queries {
 	public static String allManagers = "select distinct managers.playerid, CONCAT(namefirst,CONCAT(' ',namelast)) from managers ,master where managers.playerid = master.playerid;";
 	public static String searchPlayer = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)) as name from master where playerid in (select distinct playerid from appearances where yearid>=%s and yearid<=%s) and (LOWER(namefirst) like LOWER('%%%s%%') or LOWER(namelast) like LOWER('%%%s%%')) and ROWNUM < 100";
 	public static String playerSalariesOverTheYears = "select yearid,teamid, playerid, salary from \"Salaries\" where playerid = '%s' and yearid >= %s and yearid <=%s order by yearid";
+	public static String playersWithWeightGroups = "select CONCAT((CAST(m.weight/10 as integer)*10 - 5),CONCAT('-',(CAST(m.weight/10 as integer)*10 + 5))) as weightGroup, count(distinct b.playerid) from batting b,master m where b.playerid = m.playerid and b.yearid>=%s and b.yearid<=%s and ('%s' like CONCAT(CONCAT('%%',b.teamid),'%%')) group by CAST(m.weight/10 as integer)";
+	public static String playersWithHeightGroups = "select CONCAT((CAST(m.height/2 as integer)*2 - 1),CONCAT('-',(CAST(m.height/2 as integer)*2))) as heightGroup, count(distinct b.playerid) from batting b,master m where b.playerid = m.playerid and b.yearid>=%s and b.yearid<=%s and ('%s' like CONCAT(CONCAT('%%',b.teamid),'%%')) group by CAST(m.height/2 as integer)";
+
 }
