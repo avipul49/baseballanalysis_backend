@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baseballanalysis.model.Individual;
 import com.baseballanalysis.model.NameValue;
+import com.baseballanalysis.model.NameValues;
 import com.baseballanalysis.utils.DatabaseConnection;
 import com.baseballanalysis.utils.Queries;
 
@@ -74,21 +75,21 @@ public class PlayerController extends BaseballController {
 	}
 
 	@RequestMapping("/getPlayerWeightGroup")
-	public @ResponseBody ArrayList<NameValue> getPlayerWeightGroup(
+	public @ResponseBody ArrayList<NameValues> getPlayerWeightGroup(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		return getNameValuePair(Queries.playersWithWeightGroups, teams,
-				startYear, endYear);
+		return getNameValuesPair(Queries.battingWeightGroups, teams, startYear,
+				endYear);
 	}
 
 	@RequestMapping("/getPlayerHeightGroup")
-	public @ResponseBody ArrayList<NameValue> getPlayerHeightGroup(
+	public @ResponseBody ArrayList<NameValues> getPlayerHeightGroup(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		return getNameValuePair(Queries.playersWithHeightGroups, teams,
-				startYear, endYear);
+		return getNameValuesPair(Queries.battingHeightGroups, teams, startYear,
+				endYear);
 	}
 
 	private ArrayList<NameValue> getNameValuePair(String query, String teams,
@@ -108,6 +109,30 @@ public class PlayerController extends BaseballController {
 			}
 			connection.close();
 			return nameValues;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private ArrayList<NameValues> getNameValuesPair(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery)
+					.executeQuery();
+			ArrayList<NameValues> nameValuess = new ArrayList<NameValues>();
+			while (res.next()) {
+				NameValues nameValue = new NameValues();
+				nameValue.setName(res.getString(1));
+				nameValue.setValues(new int[] { res.getInt(2), res.getInt(3),
+						res.getInt(4) });
+				nameValuess.add(nameValue);
+			}
+			connection.close();
+			return nameValuess;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
