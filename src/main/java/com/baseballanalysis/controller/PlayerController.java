@@ -22,10 +22,6 @@ import com.baseballanalysis.utils.Queries;
 @RestController
 public class PlayerController extends BaseballController {
 
-	public static String battingManagerTeam = "select b.yearid,b.playerid, b.teamid, m.playerid as managerid, mm.namegiven, b.r, b.hr from batting b, managers m,  master mm  where  mm.playerid = m.playerid and m.teamid = b.teamid and m.yearid = b.yearid and b.yearid >= %s and b.yearid <= %s and b.playerid = '%s'";
-	public static String pitchingManagerTeam = "select p.yearid,p.playerid, p.teamid, m.playerid as managerid, mm.namegiven, p.so, p.sho from pitching p, managers m, master mm where  mm.playerid = m.playerid and m.teamid = p.teamid and m.yearid = p.yearid and p.yearid >= %s and p.yearid <= %s and p.playerid = '%s'";
-	public static String searchPlayer = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)) as name from master where playerid in (select distinct playerid from %s where yearid>=%s and yearid<=%s) and (LOWER(namefirst) like LOWER('%%%s%%') or LOWER(namelast) like LOWER('%%%s%%')) and ROWNUM < 100";
-
 	@RequestMapping("/getPlayerBirthCountryStats")
 	public @ResponseBody ArrayList<NameValue> getPlayerBirthCountryStats(
 			@RequestParam String teams, @RequestParam int startYear,
@@ -59,8 +55,8 @@ public class PlayerController extends BaseballController {
 			@RequestParam String key, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.searchPlayer,
-				"appearances", startYear, endYear, key, key);
+		String finalQuery = String.format(Queries.searchPlayer, "appearances",
+				startYear, endYear, key, key);
 		System.out.println(finalQuery);
 		return getSearchResult(finalQuery);
 	}
@@ -70,8 +66,8 @@ public class PlayerController extends BaseballController {
 			@RequestParam String key, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.searchPlayer,
-				"batting", startYear, endYear, key, key);
+		String finalQuery = String.format(Queries.searchPlayer, "batting",
+				startYear, endYear, key, key);
 		System.out.println(finalQuery);
 		return getSearchResult(finalQuery);
 	}
@@ -81,8 +77,8 @@ public class PlayerController extends BaseballController {
 			@RequestParam String key, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.searchPlayer,
-				"pitching", startYear, endYear, key, key);
+		String finalQuery = String.format(Queries.searchPlayer, "pitching",
+				startYear, endYear, key, key);
 		System.out.println(finalQuery);
 		return getSearchResult(finalQuery);
 	}
@@ -92,8 +88,8 @@ public class PlayerController extends BaseballController {
 			@RequestParam String key, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.searchPlayer,
-				"managers", startYear, endYear, key, key);
+		String finalQuery = String.format(Queries.searchPlayer, "managers",
+				startYear, endYear, key, key);
 		System.out.println(finalQuery);
 		return getSearchResult(finalQuery);
 	}
@@ -159,7 +155,7 @@ public class PlayerController extends BaseballController {
 			@RequestParam String playerid, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.battingManagerTeam,
+		String finalQuery = String.format(Queries.battingManagerTeam,
 				startYear, endYear, playerid);
 		System.out.println(finalQuery);
 		try {
@@ -191,7 +187,7 @@ public class PlayerController extends BaseballController {
 			@RequestParam String playerid, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		String finalQuery = String.format(PlayerController.pitchingManagerTeam,
+		String finalQuery = String.format(Queries.pitchingManagerTeam,
 				startYear, endYear, playerid);
 		System.out.println(finalQuery);
 		try {
