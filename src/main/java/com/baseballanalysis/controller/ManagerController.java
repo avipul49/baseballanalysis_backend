@@ -25,8 +25,8 @@ public class ManagerController extends BaseballController {
 			@RequestParam int endYear, HttpServletResponse response) {
 
 		setResposeObject(response);
-		System.out.println("ques="+Queries.battingWeightGroups);
-		return getNameValuesPair(Queries.battingWeightGroups, teams, startYear,
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
 				endYear);
 	}
 	
