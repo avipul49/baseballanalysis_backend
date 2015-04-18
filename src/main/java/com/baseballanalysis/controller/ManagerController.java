@@ -53,5 +53,56 @@ public class ManagerController extends BaseballController {
 		}
 		return null;
 	}
+	
+	@RequestMapping("/getManagerMaturityAwards")
+	public @ResponseBody ArrayList<NameValues> getManagerMaturityAwards(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
 
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
+				endYear);
+	}
+	
+
+	
+	@RequestMapping("/getManagerLoyalty")
+	public @ResponseBody ArrayList<NameValues> getManagerLoyalty(
+			@RequestParam String manager, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, manager, startYear,
+				endYear);
+	}
+	
+	
+	@RequestMapping("/getManagerTeamPerformace")
+	public @ResponseBody ArrayList<NameValues> getManagerTeamPerformace(
+			@RequestParam String manager, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, manager, startYear,
+				endYear);
+	}
+	
+
+	@RequestMapping("/getPlayerManager")
+	public @ResponseBody ArrayList<NameValues> getPlayerManager(
+			@RequestParam String player, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, player, startYear,
+				endYear);
+	}
+	
+	
+	
+	
 }

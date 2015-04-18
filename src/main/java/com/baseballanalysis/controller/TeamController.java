@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baseballanalysis.model.Individual;
+import com.baseballanalysis.model.NameValues;
 import com.baseballanalysis.model.Team;
 import com.baseballanalysis.model.TeamOrientationStats;
 import com.baseballanalysis.utils.DatabaseConnection;
@@ -152,4 +153,53 @@ public class TeamController extends BaseballController {
 		System.out.println(teams);
 		return teams;
 	}
+	
+	@RequestMapping("/getTeamAchievementAward")
+	public @ResponseBody ArrayList<NameValues> getTeamAchievementAward(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
+				endYear);
+	}
+	
+	@RequestMapping("/getTeamAgeGroup")
+	public @ResponseBody ArrayList<NameValues> getTeamAgeGroup(
+			@RequestParam String teams, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+
+		setResposeObject(response);
+		System.out.println("ques="+Queries.managerPerformance);
+		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
+				endYear);
+	}
+	
+	
+	private ArrayList<NameValues> getNameValuesPair(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery)
+					.executeQuery();
+			ArrayList<NameValues> nameValuess = new ArrayList<NameValues>();
+			while (res.next()) {
+				NameValues nameValue = new NameValues();
+				nameValue.setName(res.getString(1));
+				nameValue.setValues(new int[] { res.getInt(2), res.getInt(3),
+						res.getInt(4) });
+				nameValuess.add(nameValue);
+			}
+			connection.close();
+			return nameValuess;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 }

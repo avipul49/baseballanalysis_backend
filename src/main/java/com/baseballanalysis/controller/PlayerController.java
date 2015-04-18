@@ -149,6 +149,15 @@ public class PlayerController extends BaseballController {
 		return getNameValuesPair(Queries.pitchingHeightGroups, teams,
 				startYear, endYear);
 	}
+	
+	@RequestMapping("/getPlayerAgeAndExperiance")
+	public @ResponseBody ArrayList<NameValues> getPlayerAgeAndExperiance(
+			@RequestParam String playerid, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+		setResposeObject(response);
+		return getNameValuesPair(Queries.pitchingHeightGroups, playerid,
+				startYear, endYear);
+	}
 
 	@RequestMapping("/getBattingManagerTeamDetails")
 	public @ResponseBody ArrayList<Batting> getPitchingManagerTeamDetails(
