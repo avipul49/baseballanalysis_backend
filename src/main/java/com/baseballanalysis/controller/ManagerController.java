@@ -53,15 +53,36 @@ public class ManagerController extends BaseballController {
 		}
 		return null;
 	}
-	
+	private ArrayList<NameValues> getNameValuesPairSingle(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery)
+					.executeQuery();
+			ArrayList<NameValues> nameValuess = new ArrayList<NameValues>();
+			while (res.next()) {
+				NameValues nameValue = new NameValues();
+				nameValue.setName(res.getString(1));
+				nameValue.setValues(new int[] { res.getInt(2)});
+				nameValuess.add(nameValue);
+			}
+			connection.close();
+			return nameValuess;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	@RequestMapping("/getManagerMaturityAwards")
 	public @ResponseBody ArrayList<NameValues> getManagerMaturityAwards(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 
 		setResposeObject(response);
-		System.out.println("ques="+Queries.managerPerformance);
-		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
+		System.out.println("ques="+Queries.managerAwards);
+		return getNameValuesPairSingle(Queries.managerAwards, teams, startYear,
 				endYear);
 	}
 	
