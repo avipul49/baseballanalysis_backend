@@ -11,7 +11,7 @@ public class Queries {
 	public static String teamTendency = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)), bats, throws from master where playerid in"
 			+ "(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%')))";
 
-	public static String playerBirthCountry = "select birthcountry, count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by BIRTHCOUNTRY";
+	public static String playerBirthCountry = "select birthcountry, count(playerid) from master where playerid in(select distinct playerid- from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by BIRTHCOUNTRY";
 	public static String playerBirthState = "select CONCAT('US-',birthstate), count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by CONCAT('US-',birthstate)";
 	public static String playerBirthCity = "select birthcity, count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by birthcity";
 	public static String allManagers = "select distinct managers.playerid, CONCAT(namefirst,CONCAT(' ',namelast)) from managers ,master where managers.playerid = master.playerid;";
@@ -31,5 +31,5 @@ public class Queries {
 	//public static String managerTenure = "select name,count (distinct m.yearid) from managers m, teams t where m.yearID>%s and m.yearid<%s and  ('%s' like CONCAT(CONCAT('%%',m.playerid),'%%'))  and m.teamid=t.teamid group by name";
 	public static String managerTenure = "select name,count (distinct m.yearid) from managers m, teams t where m.yearID>%s and m.yearid<%s and m.playerId='collite99' and m.teamid=t.teamid group by name";
     public static String managerTeamPerf = "select t.name,sum(t.g) games,sum(t.w) wins,sum(t.l) loss,sum(t.R) runs,sum(t.AB) atbats,sum(t.H) hits,sum(t.HR) homeruns,sum(t.SO) strikeouts,sum(t.CS) coughtstealing,sum(t.RA) runsallowed,sum(t.er), sum(t.CG) completedgames,sum(t.SHO) shutouts,sum(t.HA) hitsallowed,sum(t.HRA) homerunsallowed ,sum(t.FP), sum(attendance),sum(t.SOA),sum(t.RANK) from managers m, teams t where m.yearID>%s and m.yearid<%s and m.playerId='collite99' and m.teamid=t.teamid group by t.name";
-
+    public static String teamAwardsComparison="select count(awardid) awards, t.yearid,t.teamid from appearances t,awardsplayers a where t.yearid>%s and t.yearid<%s and a.yearid=t.yearid and a.playerid=t.playerid  and ('%s' like CONCAT(CONCAT('%%',t.teamid),'%%')) group by t.yearid,t.teamid order by t.yearid asc";
 }

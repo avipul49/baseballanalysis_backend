@@ -155,13 +155,13 @@ public class TeamController extends BaseballController {
 	}
 	
 	@RequestMapping("/getTeamAchievementAward")
-	public @ResponseBody ArrayList<NameValues> getTeamAchievementAward(
+	public @ResponseBody ArrayList<Team> getTeamAchievementAward(
 			@RequestParam String teams, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 
 		setResposeObject(response);
-		System.out.println("ques="+Queries.managerPerformance);
-		return getNameValuesPair(Queries.managerPerformance, teams, startYear,
+		System.out.println("ques="+Queries.teamAwardsComparison);
+		return getTeamAwards(Queries.teamAwardsComparison, teams, startYear,
 				endYear);
 	}
 	
@@ -195,6 +195,30 @@ public class TeamController extends BaseballController {
 			}
 			connection.close();
 			return nameValuess;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private ArrayList<Team> getTeamAwards(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery).executeQuery();
+			ArrayList<Team> fetchedTeams = new ArrayList<Team>();
+			while (res.next()) {
+				Team team = new Team();
+				
+				team.setWins(res.getInt(1));
+				team.setYearId(res.getInt(2));
+				team.setName(res.getString(3));
+				fetchedTeams.add(team);
+			}
+			connection.close();
+			return fetchedTeams;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
