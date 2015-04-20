@@ -11,7 +11,7 @@ public class Queries {
 	public static String teamTendency = "select playerid, CONCAT(namefirst,CONCAT(' ',namelast)), bats, throws from master where playerid in"
 			+ "(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%')))";
 
-	public static String playerBirthCountry = "select birthcountry, count(playerid) from master where playerid in(select distinct playerid- from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by BIRTHCOUNTRY";
+	public static String playerBirthCountry = "select birthcountry, count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by BIRTHCOUNTRY";
 	public static String playerBirthState = "select CONCAT('US-',birthstate), count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by CONCAT('US-',birthstate)";
 	public static String playerBirthCity = "select birthcity, count(playerid) from master where playerid in(select distinct playerid from appearances where yearid>=%s and yearid<=%s and ('%s' like CONCAT(CONCAT('%%',teamid),'%%'))) group by birthcity";
 	public static String allManagers = "select distinct managers.playerid, CONCAT(namefirst,CONCAT(' ',namelast)) from managers ,master where managers.playerid = master.playerid;";
