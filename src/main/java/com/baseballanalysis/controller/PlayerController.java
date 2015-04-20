@@ -155,10 +155,19 @@ public class PlayerController extends BaseballController {
 			@RequestParam String playerid, @RequestParam int startYear,
 			@RequestParam int endYear, HttpServletResponse response) {
 		setResposeObject(response);
-		return getNameValuesPair(Queries.pitchingHeightGroups, playerid,
+		return getNameValuesPairBat(Queries.playerAgePerfBatter, playerid,
 				startYear, endYear);
 	}
 
+	@RequestMapping("/getPlayerAgeAndExperiancePit")
+	public @ResponseBody ArrayList<NameValues> getPlayerAgeAndExperiancePit(
+			@RequestParam String playerid, @RequestParam int startYear,
+			@RequestParam int endYear, HttpServletResponse response) {
+		setResposeObject(response);
+		return getNameValuesPairSingle(Queries.playerAgePerfPitcher, playerid,
+				startYear, endYear);
+	}
+	
 	@RequestMapping("/getBattingManagerTeamDetails")
 	public @ResponseBody ArrayList<Batting> getPitchingManagerTeamDetails(
 			@RequestParam String playerid, @RequestParam int startYear,
@@ -260,6 +269,53 @@ public class PlayerController extends BaseballController {
 				nameValue.setName(res.getString(1));
 				nameValue.setValues(new int[] { res.getInt(2), res.getInt(3),
 						res.getInt(4) });
+				nameValuess.add(nameValue);
+			}
+			connection.close();
+			return nameValuess;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private ArrayList<NameValues> getNameValuesPairSingle(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery)
+					.executeQuery();
+			ArrayList<NameValues> nameValuess = new ArrayList<NameValues>();
+			while (res.next()) {
+				NameValues nameValue = new NameValues();
+				nameValue.setName(res.getString(1));
+				nameValue.setValues(new int[] { res.getInt(2), res.getInt(3),
+						res.getInt(4),res.getInt(5),res.getInt(6) });
+				nameValuess.add(nameValue);
+			}
+			connection.close();
+			return nameValuess;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	private ArrayList<NameValues> getNameValuesPairBat(String query, String teams,
+			int startYear, int endYear) {
+		String finalQuery = String.format(query, startYear, endYear, teams);
+		System.out.println(finalQuery);
+		try {
+			Connection connection = DatabaseConnection.getConnection();
+			ResultSet res = connection.prepareStatement(finalQuery)
+					.executeQuery();
+			ArrayList<NameValues> nameValuess = new ArrayList<NameValues>();
+			while (res.next()) {
+				NameValues nameValue = new NameValues();
+				nameValue.setName(res.getString(1));
+				nameValue.setValues(new int[] { res.getInt(2), res.getInt(3),
+						res.getInt(4),res.getInt(5),res.getInt(6),res.getInt(7) });
 				nameValuess.add(nameValue);
 			}
 			connection.close();
